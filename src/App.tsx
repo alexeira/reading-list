@@ -1,33 +1,49 @@
 import { useState } from 'react'
 
-import reactLogo from './assets/react.svg'
+import mock from '../books.json'
 
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Books } from './components/Books'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" rel="noreferrer" target="_blank">
-          <img alt="Vite logo" className="logo" src={viteLogo} />
-        </a>
-        <a href="https://react.dev" rel="noreferrer" target="_blank">
-          <img alt="React logo" className="logo react" src={reactLogo} />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
-  )
+export interface Book {
+  title: string
+  pages: number
+  genre: string
+  cover: string
+  synopsis: string
+  year: number
+  ISBN: string
+  author: {
+    name: string
+    otherBooks: string[]
+  }
 }
 
-export default App
+const books: Book[] = mock.library.map(mock => mock.book)
+
+export const App: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-slate-950 text-gray-50 ">
+      <div className="mx-auto grid max-w-7xl grid-cols-3 grid-rows-[200px,1fr] gap-4 p-4">
+        <header className="col-span-full w-full rounded border p-4">
+          <p>Libros disponibles</p>
+          <form>
+            <section>
+              <label>Filtrar por páginas</label>
+              <input type="range" />
+            </section>
+            <section>
+              <label>Filtrar por género</label>
+              <select>
+                <option value="todas">Todos</option>
+              </select>
+            </section>
+          </form>
+        </header>
+        <main className=" col-span-2 rounded border p-4">
+          <Books books={books} />
+        </main>
+        <aside className="rounded border p-4">lista de lectura</aside>
+      </div>
+    </div>
+  )
+}
